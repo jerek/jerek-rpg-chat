@@ -1,0 +1,2 @@
+AddHandler x-mapp-php6 .php
+AddType x-mapp-php6 .php
