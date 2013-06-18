@@ -7,8 +7,25 @@
         "zf2"
     ],
     "homepage": "http://framework.zend.com/",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:jerek/jerek-base.git"
+        }
+    ],
     "require": {
-        "php": ">=5.3.3",
-        "zendframework/zendframework": ">2.2.0rc1"
+        "doctrine/dbal": "dev-master",
+        "doctrine/common": "dev-master",
+        "doctrine/orm": "dev-master",
+
+        "doctrine/doctrine-module": "dev-master as 0.8",
+        "doctrine/doctrine-orm-module": "dev-master",
+
+        "jerek/jerek-base": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Application": "module/Application/src"
+        }
     }
 }
