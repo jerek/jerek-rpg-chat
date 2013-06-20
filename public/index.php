@@ -1,4 +1,6 @@
 <?php
+require '../php_error_log.php';
+
 ini_set('display_errors', true);
 ini_set('display_startup_errors', true);
 
