@@ -1,0 +1,2 @@
+JF.site = new function() {
+};

@@ -1,8 +1,7 @@
 <?php
+// 1&1-specific settings
 require '../php_error_log.php';
-
-ini_set('display_errors', true);
-ini_set('display_startup_errors', true);
+date_default_timezone_set('America/Chicago');
 
 // Required to make Zend Developer Tools execution time accurate.
 define('REQUEST_MICROTIME', microtime(true));

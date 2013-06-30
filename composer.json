@@ -21,6 +21,8 @@
         "doctrine/doctrine-module": "dev-master as 0.8",
         "doctrine/doctrine-orm-module": "dev-master",
 
+        "kriswallsmith/assetic": ">=v1.1.0-alpha1@alpha",
+
         "jerek/jerek-base": "dev-master"
     },
     "autoload": {

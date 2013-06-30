@@ -8,6 +8,23 @@
  */
 
 return array(
+    'asset_manager' => [
+        'resolver_configs' => [
+            'collections' => [
+                'styles/style.min.css' => [
+                    'styles/site/style.less',
+                ],
+                'scripts/script.min.js' => [
+                    'scripts/site/base.js',
+                ],
+            ],
+
+            'paths' => [
+                'application' => __DIR__ . '/../public'
+            ],
+        ],
+    ],
+
     'router' => array(
         'routes' => array(
             'home' => array(
@@ -15,7 +32,7 @@ return array(
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => 'JerekBase\Controller\Index',
                         'action'     => 'index',
                     ),
                 ),
@@ -83,13 +100,18 @@ return array(
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
     ),
+
+    'jerekbase' => [
+        'less' => [
+            'paths' => [
+                __DIR__ . '/../public/styles'
+            ],
+        ],
+    ],
 );
