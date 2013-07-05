@@ -79,6 +79,14 @@ return [
         ],
     ],
 
+    'doctrine' => [
+        'driver' => [
+            'application_entities' => [
+                'paths' => [__DIR__ . '/../src/Application/Entity'],
+            ],
+        ],
+    ],
+
     'translator' => [
         'locale' => 'en_US',
         'translation_file_patterns' => [
