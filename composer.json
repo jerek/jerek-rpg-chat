@@ -11,6 +11,10 @@
         {
             "type": "vcs",
             "url": "git@github.com:jerek/jerek-base.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:jerek/jerek-user.git"
         }
     ],
     "require": {
@@ -23,7 +27,8 @@
 
         "kriswallsmith/assetic": ">=v1.1.0-alpha1@alpha",
 
-        "jerek/jerek-base": "dev-master"
+        "jerek/jerek-base": "dev-master",
+        "jerek/jerek-user": "dev-master"
     },
     "autoload": {
         "psr-0": {

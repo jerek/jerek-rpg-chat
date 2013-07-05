@@ -3,7 +3,7 @@
 namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JerekBase\Entity\IdPropertyTrait;
-use JerekBase\Entity\UserPropertyTrait;
+use JerekUser\Entity\UserPropertyTrait;
 
 /**
  * @ORM\Entity

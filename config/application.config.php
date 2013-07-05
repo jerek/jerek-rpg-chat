@@ -8,11 +8,14 @@ return [
 
         'SpiffyNavigation',
 
+        'ZfcBase',
         'ZfcTwig',
+        'ZfcUser',
+        'ZfcUserDoctrineORM',
 
         'JerekBase',
 
-        // Other Jerek modules will go here
+        'JerekUser',
 
         'ZendDeveloperTools',
 
