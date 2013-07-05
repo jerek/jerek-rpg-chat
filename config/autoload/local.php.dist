@@ -1,6 +1,6 @@
 <?php
 
-// Default development settings. DO NOT USE ON LIVE SITE.
+// Default development settings. DO NOT USE ON LIVE SITE. See below for universal settings.
 
 ini_set('display_errors', true);
 ini_set('display_startup_errors', true);
@@ -21,6 +21,23 @@ return [
     'zfctwig' => [
         'environment_options' => [
             'cache' => null
+        ],
+    ],
+
+    // Default settings for any environment.
+
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' =>'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                'params' => [
+                    'host'     => 'localhost',
+                    'port'     => '3306',
+                    'user'     => 'username',
+                    'password' => 'password',
+                    'dbname'   => 'database',
+                ],
+            ],
         ],
     ],
 ];
