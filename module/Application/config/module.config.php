@@ -72,6 +72,7 @@ return [
             ],
         ],
     ],
+
     'service_manager' => [
         'abstract_factories' => [
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
@@ -81,6 +82,23 @@ return [
             'translator' => 'MvcTranslator',
         ],
     ],
+
+    'doctrine' => [
+        'driver' => [
+            'application_entities' => [
+                'class' =>'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => [__DIR__ . '/../src/Application/Entity'],
+            ],
+
+            'orm_default' => [
+                'drivers' => [
+                    'Application\Entity' => 'application_entities',
+                ],
+            ],
+        ],
+    ],
+
     'translator' => [
         'locale' => 'en_US',
         'translation_file_patterns' => [
@@ -91,11 +109,13 @@ return [
             ],
         ],
     ],
+
     'controllers' => [
         'invokables' => [
             'Application\Controller\Index' => 'Application\Controller\IndexController'
         ],
     ],
+
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
