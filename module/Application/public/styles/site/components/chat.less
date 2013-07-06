@@ -1,0 +1,52 @@
+.datatable {width:100%;
+    th, td {text-align:center}
+    th:first-child {text-align:left}
+    td:first-child {text-align:left}
+    tr:hover td {background:#f4f4f4}
+}
+
+@bottom-row-total-height:50px;
+@bottom-row-border-height:1px;
+
+.room-rowframe {bottom:@bottom-row-total-height + @bottom-row-border-height;left:0;overflow-y:scroll;position:absolute;right:0;top:0;
+    table.room-rows {border-collapse:separate;border-spacing:0;width:99.9%;
+        tr {
+            td {padding:4px 8px;
+                &.timestamp {color:@jf-text-extraquiet;.fixedwidth-font;padding-right:0;text-align:right;white-space:nowrap;width:1px}
+                .user {background:#ddd;border-radius:99px;font-weight:bold;padding:4px 8px;margin-right:8px;visibility:hidden}
+            }
+            &[data-type="roll"] {
+                .content {color:@jf-text-quieter;
+                    a, b {color:inherit}
+                    em {color:@jf-text-negative;font-style:normal}
+                    /*
+                    a {color:inherit;font-size:10px;font-weight:bold;margin:0 5px;opacity:.5;
+                        &:hover {opacity:1}
+                    }
+                    */
+                }
+            }
+            &.start-user {
+                td {border-top:1px solid #ddd}
+                .user {visibility:visible}
+                &:first-child {
+                    td {border-top:0}
+                }
+            }
+        }
+    }
+}
+
+.room-actionframe {#gradient > .vertical(#f2f2f2, #dfdfdf);border-top:@bottom-row-border-height solid #d4d4d4;bottom:0;box-shadow:0 1px 10px rgba(0, 0, 0, 0.1);height:@bottom-row-total-height;left:0;position:absolute;right:0;width:100%;
+    td {padding:@box-padding-medium;padding-left:0;text-align:left;vertical-align:middle;
+        &:first-child {padding-left:@box-padding-medium;white-space:nowrap;width:1px}
+        form {margin:0;position:relative;
+            input {margin:0;width:99%}
+        }
+    }
+    .room-dice {
+        a {#gradient > .vertical(#4c4c4c, #000);border:0;border-radius:7px;box-shadow:0 0 8px rgba(0,0,0,.65);color:#ddd;display:inline-block;font-size:20px;line-height:normal;outline:0;margin-right:10px;padding:4px 8px;text-decoration:none !important;text-shadow:0 0 20px #000;
+            &:hover {#gradient > .vertical(#000, #333)}
+        }
+    }
+}

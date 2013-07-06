@@ -19,6 +19,7 @@ return [
                 ],
                 'scripts/script.min.js' => [
                     'scripts/site/base.js',
+                    'scripts/site/chat.js',
                 ],
             ],
 
@@ -29,48 +30,7 @@ return [
     ],
 
     'router' => [
-        'routes' => [
-            'home' => [
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => [
-                    'route'    => '/',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\Index',
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => [
-                'type'    => 'Literal',
-                'options' => [
-                    'route'    => '/application',
-                    'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'default' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => [
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ],
-                            'defaults' => [
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
+        'routes' => include __DIR__ . '/routes.config.php',
     ],
 
     'service_manager' => [
@@ -87,6 +47,8 @@ return [
         ],
     ],
 
+    'spiffy_navigation' => include __DIR__ . '/navigation.config.php',
+
     'translator' => [
         'locale' => 'en_US',
         'translation_file_patterns' => [
@@ -100,14 +62,12 @@ return [
 
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Room'  => 'Application\Controller\RoomController',
         ],
     ],
 
     'view_manager' => [
-        'template_map' => [
-            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-        ],
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],

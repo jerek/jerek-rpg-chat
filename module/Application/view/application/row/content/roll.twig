@@ -1,0 +1,15 @@
+{% spaceless %}
+    {% set sides = 0 %}
+    {% set results = [] %}
+    {% set rolls = roll ? [roll] : row.getRolls() %}
+
+    {% for roll in rolls %}
+        {% set sides = roll.getSides() %}
+        {% set results = results|merge([roll.getValue()]) %}
+    {% endfor %}
+
+    {# For now just using the first result since #d# isn't supported yet. #}
+    {% set result = results[0] %}
+{% endspaceless -%}
+rolled a <a href="javascript:;" data-sides="{{ sides }}" onclick="JF.site.chat.actions.roll.click.call(this)"><b>{{ sides }}</b>-sided die</a> and got <strong>{% if result is sameas(sides) or result is sameas(1) %}<em>{{ result }}</em>{% else %}{{ result }}{% endif %}</strong>.
+{%- if sides == 1 %} Also, reality collapses.{% endif -%}

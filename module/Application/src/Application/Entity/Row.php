@@ -20,10 +20,11 @@ class Row {
     protected $time;
 
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var RowType
+     * @ORM\ManyToOne(targetEntity="RowType", inversedBy="rows")
+     * @ORM\JoinColumn(name="type_id")
      */
-    protected $typeId;
+    protected $type;
 
     /**
      * @var Room
@@ -31,6 +32,52 @@ class Row {
      * @ORM\JoinColumn(name="room_id", nullable=true)
      */
     protected $room;
+
+    /**
+     * @var Roll
+     * @ORM\OneToMany(targetEntity="Roll", mappedBy="row")
+     */
+    protected $rolls;
+
+    /**
+     * @var Message
+     * @ORM\OneToOne(targetEntity="Message", mappedBy="row")
+     */
+    protected $message;
+
+    // Getters and Setters
+
+    /**
+     * @param \Application\Entity\Message $message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+    }
+
+    /**
+     * @return \Application\Entity\Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param \Application\Entity\Roll $rolls
+     */
+    public function setRolls($rolls)
+    {
+        $this->rolls = $rolls;
+    }
+
+    /**
+     * @return \Application\Entity\Roll
+     */
+    public function getRolls()
+    {
+        return $this->rolls;
+    }
 
     /**
      * @param \Application\Entity\Room $room
@@ -65,19 +112,18 @@ class Row {
     }
 
     /**
-     * @param mixed $typeId
+     * @param \Application\Entity\RowType $type
      */
-    public function setTypeId($typeId)
+    public function setType($type)
     {
-        $this->typeId = $typeId;
+        $this->type = $type;
     }
 
     /**
-     * @return mixed
+     * @return \Application\Entity\RowType
      */
-    public function getTypeId()
+    public function getType()
     {
-        return $this->typeId;
+        return $this->type;
     }
-
 }

@@ -1,0 +1,12 @@
+{% spaceless %}
+    {% set type = row.getType().getName() %}
+    <tr{{ startUser ? ' class="start-user"' : '' }} data-type="{{ type }}">
+        <td class="timestamp">
+            {%- include 'application/row/pieces/timestamp' -%}
+        </td>
+        <td class="body">
+            <span class="user">{%- include 'application/row/pieces/username' -%}</span>
+            <span class="content">{%- include 'application/row/content/' ~ type -%}</span>
+        </td>
+    </tr>
+{% endspaceless %}

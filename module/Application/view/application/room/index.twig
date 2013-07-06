@@ -1,0 +1,21 @@
+{% extends 'layout/layout' %}
+
+{% block content %}
+
+    <h1>Rooms</h1>
+
+    <table class="datatable">
+        <tr><th>Name</th><th>Owner</th></tr>
+        {% if rooms|length > 0 %}
+            {% for room in rooms %}
+                <tr>
+                    <td><a href="{{ url('room', { id: room.getId() }) }}">{{ room.getName() }}</td>
+                    <td>{{ room.getUser().getDisplayName() }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="2"><i>No rooms available. <a href="javascript:;">Create a room</a>.</i></td></tr>
+        {% endif %}
+    </table>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'layout/fill' %}
+
+{% block content %}
+
+    <div class="room-rowframe">
+        <h1>{{ room.getName() }}</h1>
+        <table class="room-rows">
+            {% for row in room.getRows() %}
+                {% if lastUser is not sameas(row.getUser().getId()) %}
+                    {% include 'application/row/display' with {startUser: true} %}
+                {% else %}
+                    {% include 'application/row/display' %}
+                {% endif %}
+                {% set lastUser = row.getUser().getId() %}
+            {% endfor %}
+        </table>
+    </div>
+    <table class="room-actionframe">
+        <tr>
+            <td class="room-dice"></td>
+            <td class="room-message"><form></form></td>
+        </tr>
+    </table>
+    <script>JF.site.chat.init();</script>
+
+{% endblock %}

@@ -27,6 +27,8 @@ class Room {
      */
     protected $rows;
 
+    // Getters and Setters
+
     /**
      * @param boolean $deleted
      */
