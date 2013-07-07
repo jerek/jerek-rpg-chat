@@ -87,26 +87,50 @@ class RoomController extends AbstractActionController
         $objectManager->persist($row);
 
         if ($type->getName() == 'message') {
-            // Set Message
+            // Set message
 
             $content = new Message();
             $content->setValue($value);
+
+            $content->setRow($row);
+            $objectManager->persist($content);
         } elseif ($type->getName() == 'roll') {
-            // Set Roll Result
-            // TODO: Support for #d#
+            // Calculate and set roll result
 
-            $result = mt_rand(1, $value);
+            if (preg_match('/^[0-9]+$/', $value)) {
+                // Single die
 
-            $content = new Roll();
-            $content->setValue($result);
-            $content->setSides($value);
+                $result = mt_rand(1, $value);
+
+                $content = new Roll();
+                $content->setValue($result);
+                $content->setSides($value);
+
+                $content->setRow($row);
+                $objectManager->persist($content);
+            } elseif (preg_match('/^([0-9]+)d([0-9]+)$/', $value, $dice)) {
+                // Multiple dice
+
+                $count = $dice[1];
+                $sides = $dice[2];
+
+                for ($i = 0; $i < $count; $i++) {
+                    $result = mt_rand(1, $sides);
+
+                    $content = new Roll();
+                    $content->setValue($result);
+                    $content->setSides($sides);
+
+                    $content->setRow($row);
+                    $objectManager->persist($content);
+                }
+            } else {
+                throw new \Exception('Poorly formed roll request.');
+            }
         } else {
             throw new \Exception('Unhandled content type.');
         }
 
-        $content->setRow($row);
-
-        $objectManager->persist($content);
         $objectManager->flush();
 
         $rowId = $row->getId();

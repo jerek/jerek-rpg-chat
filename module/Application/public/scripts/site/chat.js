@@ -115,10 +115,16 @@ JF.site.chat.actions = new function() {
     };
 
     this.roll = function() {
-        var sides = $(this).attr('data-sides');
+        var $this = $(this);
+        var sides = $this.attr('data-sides');
+        var count = $this.attr('data-count');
 
         if (sides) {
-            JF.site.chat.actions.send('roll', sides);
+            if (count) {
+                JF.site.chat.actions.send('roll', count + 'd' + sides);
+            } else {
+                JF.site.chat.actions.send('roll', sides);
+            }
         }
 
         return false;
@@ -359,7 +365,7 @@ JF.site.chat.render.content = new function() {
         }
         $content
             .append('rolled ')
-            .append(this.rollLink(sides, 1, $content))
+            .append(this.rollLink(sides, rolls.length, $content))
             .append(' and got ');
         this.rollResults(rolls, sides, $content);
         $content
@@ -383,7 +389,9 @@ JF.site.chat.render.content = new function() {
                 .append('a ')
                 .append($a);
         } else {
-            $a.html('<b>' + count + ' ' + sides + '</b>-sided dice');
+            $a
+                .attr('data-count', count)
+                .html(count + ' <b>' + sides + '</b>-sided dice');
             $content
                 .append($a);
         }
@@ -391,19 +399,39 @@ JF.site.chat.render.content = new function() {
     };
 
     this.rollResults = function(values, sides, $content) {
+        if (values.length > 1) {
+            var total = 0;
+            for (var i in values) {
+                total += values[i];
+            }
+            $content
+                .append(this.rollResult(total, sides))
+                .append(' (');
+        }
+        console.log('loop');
         for (var i = 0; i < values.length; i++) {
-            $content.append(this.rollResult(values[i], sides));
+            console.log(values[i],sides, values.length);
+            $content.append(this.rollResult(values[i], sides, values.length > 1));
             if (i + 1 < values.length) {
                 $content.append(', ');
             }
         }
+        console.log('loop done');
+        if (values.length > 1) {
+            $content.append(')');
+        }
+        console.log('finished func');
     };
 
-    this.rollResult = function(value, sides) {
-        if (!isNaN(sides) && value == sides || value == 1) {
-            return $('<strong><em>' + value + '</em></strong>');
+    this.rollResult = function(value, sides, unbolded) {
+        if (unbolded) {
+            return $($.parseHTML('' + value));
         } else {
-            return $('<strong>' + value + '</strong>');
+            if (!isNaN(sides) && value == sides || value == 1) {
+                return $('<strong><em>' + value + '</em></strong>');
+            } else {
+                return $('<strong>' + value + '</strong>');
+            }
         }
     };
 };
