@@ -6,7 +6,7 @@ use JerekBase\Entity\IdPropertyTrait;
 use JerekUser\Entity\UserPropertyTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\Row")
  * @ORM\Table(name="row")
  */
 class Row {

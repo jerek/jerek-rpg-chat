@@ -7,7 +7,7 @@ use JerekBase\Entity\NamePropertyTrait;
 use JerekUser\Entity\UserPropertyTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\Room")
  * @ORM\Table(name="room")
  */
 class Room {

@@ -2,6 +2,10 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Message;
+use Application\Entity\Roll;
+use Application\Entity\Row;
+use Doctrine\ORM\Tools\Export\ExportException;
 use Doctrine\Tests\ORM\Functional\Ticket\Entity;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -22,116 +26,88 @@ class RoomController extends AbstractActionController
 
     public function viewAction()
     {
+        $roomId = $this->getEvent()->getRouteMatch()->getParam('id');
+        $roomService = $this->getServiceLocator()->get('Application\Service\Room');
+
+        return new ViewModel([
+            'room'  => $roomService->getRoomData($roomId),
+        ]);
+    }
+
+    public function contentAction()
+    {
+        $roomId = $this->getEvent()->getRouteMatch()->getParam('id');
+        $typeName = $this->getEvent()->getRouteMatch()->getParam('type');
+        $value = $this->getEvent()->getRouteMatch()->getParam('value');
+
+        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+            throw new \Exception('Requires login.');
+        }
+
+        // FIXME: Verify user has permissions in room
+
         $objectManager = $this
             ->getServiceLocator()
             ->get('Doctrine\ORM\EntityManager');
 
-        $roomId = $this->getEvent()->getRouteMatch()->getParam('id');
+        // Get Room
+
         $room = $objectManager->find('Application\Entity\Room', $roomId);
 
-        return new ViewModel([
-            'room' => $room,
+        if (!$room) {
+            throw new \Exception('Room not found.');
+        }
+
+        // Get Type
+
+        $type = $objectManager
+            ->getRepository('Application\Entity\RowType')
+            ->findOneBy(array('name' => $typeName));
+
+        if (!$type) {
+            throw new \Exception('Content type not found.');
+        }
+
+        // Set Row
+
+        $row = new Row();
+        $row->setType($type);
+        $row->setTime(new \DateTime('now'));
+        $row->setRoom($room);
+        $row->setUser($this->zfcUserAuthentication()->getIdentity());
+
+        $objectManager->persist($row);
+
+        if ($type->getName() == 'message') {
+            // Set Message
+
+            $content = new Message();
+            $content->setValue($value);
+        } elseif ($type->getName() == 'roll') {
+            // Set Roll Result
+            // TODO: Support for #d#
+
+            $result = mt_rand(1, $value);
+
+            $content = new Roll();
+            $content->setValue($result);
+            $content->setSides($value);
+        } else {
+            throw new \Exception('Unhandled content type.');
+        }
+
+        $content->setRow($row);
+
+        $objectManager->persist($content);
+        $objectManager->flush();
+
+        $rowId = $row->getId();
+        $rowService = $this->getServiceLocator()->get('Application\Service\Row');
+
+        $viewModel = new ViewModel([
+            'row' => $rowService->getRowData($rowId)
         ]);
-    }
 
-    public function messageAction()
-    {
-        if ($this->zfcUserAuthentication()->hasIdentity()) {
-            $roomId = $this->getEvent()->getRouteMatch()->getParam('id');
-            $messageText = $this->getEvent()->getRouteMatch()->getParam('message');
-
-            if ($roomId && $messageText) {
-                $objectManager = $this
-                    ->getServiceLocator()
-                    ->get('Doctrine\ORM\EntityManager');
-
-                // Get Room
-
-                $room = $objectManager->find('Application\Entity\Room', $roomId);
-
-                // Get Type
-
-                $type = $objectManager->find('Application\Entity\RowType', 1); // FIXME: Using hardcoded ID!
-
-                // Set Row
-
-                $row = new \Application\Entity\Row();
-                $row->setType($type);
-                $row->setTime(new \DateTime('now'));
-                $row->setRoom($room);
-                $row->setUser($this->zfcUserAuthentication()->getIdentity());
-
-                $objectManager->persist($row);
-                $objectManager->flush();
-
-                // Set Message
-
-                $message = new \Application\Entity\Message();
-                $message->setValue($messageText);
-                $message->setRow($row);
-
-                $objectManager->persist($message);
-                $objectManager->flush();
-
-                return new ViewModel([
-                    'message' => $message,
-                    'row'     => $row,
-                ]);
-            }
-        }
-
-        return new ViewModel();
-    }
-
-    public function rollAction()
-    {
-        if ($this->zfcUserAuthentication()->hasIdentity()) {
-            $roomId = $this->getEvent()->getRouteMatch()->getParam('id');
-            $sides = intval($this->getEvent()->getRouteMatch()->getParam('sides'));
-
-            if ($roomId && $sides && $sides > 0) {
-                $objectManager = $this
-                    ->getServiceLocator()
-                    ->get('Doctrine\ORM\EntityManager');
-
-                // Get Room
-
-                $room = $objectManager->find('Application\Entity\Room', $roomId);
-
-                // Get Type
-
-                $type = $objectManager->find('Application\Entity\RowType', 2); // FIXME: Using hardcoded ID!
-
-                // Set Row
-
-                $row = new \Application\Entity\Row();
-                $row->setType($type);
-                $row->setTime(new \DateTime('now'));
-                $row->setRoom($room);
-                $row->setUser($this->zfcUserAuthentication()->getIdentity());
-
-                $objectManager->persist($row);
-                $objectManager->flush();
-
-                // Set Roll Result
-
-                $result = mt_rand(1, $sides);
-
-                $roll = new \Application\Entity\Roll();
-                $roll->setValue($result);
-                $roll->setSides($sides);
-                $roll->setRow($row);
-
-                $objectManager->persist($roll);
-                $objectManager->flush();
-
-                return new ViewModel([
-                    'roll' => $roll,
-                    'row'  => $row,
-                ]);
-            }
-        }
-
-        return new ViewModel();
+        return $viewModel;
     }
 }

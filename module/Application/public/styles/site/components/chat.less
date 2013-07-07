@@ -9,11 +9,20 @@
 @bottom-row-border-height:1px;
 
 .room-rowframe {bottom:@bottom-row-total-height + @bottom-row-border-height;left:0;overflow-y:scroll;position:absolute;right:0;top:0;
+    .room-rowframe-inner {overflow:hidden;padding:10px}
     table.room-rows {border-collapse:separate;border-spacing:0;width:99.9%;
         tr {
-            td {padding:4px 8px;
-                &.timestamp {color:@jf-text-extraquiet;.fixedwidth-font;padding-right:0;text-align:right;white-space:nowrap;width:1px}
+            &.hover td {background:#f4f4f4}
+            td {padding:4px 10px 4px 3px;
+                &:first-child {.borderRadius-left(99px)}
+                &:last-child {.borderRadius-right(99px)}
+                &.timestamp {color:@jf-text-extraquiet;cursor:default;.fixedwidth-font;text-align:right;white-space:nowrap;width:1px;
+                    .time {min-height:@line-height-medium}
+                }
                 .user {background:#ddd;border-radius:99px;font-weight:bold;padding:4px 8px;margin-right:8px;visibility:hidden}
+            }
+            &[data-type="day"] {
+                td {font-size:19px;line-height:1.5em}
             }
             &[data-type="roll"] {
                 .content {color:@jf-text-quieter;
@@ -29,7 +38,7 @@
             &.start-user {
                 td {border-top:1px solid #ddd}
                 .user {visibility:visible}
-                &:first-child {
+                &:first-child, &.first-in-day {
                     td {border-top:0}
                 }
             }

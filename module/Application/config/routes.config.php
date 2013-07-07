@@ -35,23 +35,13 @@ return [
         ],
         'may_terminate' => true,
         'child_routes' => [
-            'roll' => [
+            'content' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/roll/:sides',
+                    'route' => '/content/:type/:value',
                     'defaults' => [
                         'controller' => 'Application\Controller\Room',
-                        'action'     => 'roll',
-                    ],
-                ],
-            ],
-            'message' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => '/message/:message',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\Room',
-                        'action'     => 'message',
+                        'action'     => 'content',
                     ],
                 ],
             ],
