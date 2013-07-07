@@ -69,7 +69,7 @@ JF.site.chat.html = new function() {
                 $('<a href="javascript:;"/>')
                     .html(dice[i])
                     .attr('data-sides', dice[i])
-                    .click(JF.site.chat.actions.roll.click)
+                    .click(JF.site.chat.actions.roll)
             );
         }
         return $div;
@@ -101,22 +101,20 @@ JF.site.chat.actions = new function() {
     this.error = function() {
         JF.debug(arguments);
     };
-};
 
-JF.site.chat.actions.messages = new function() {
-    this.submit = function() {
-        var message = $('input', this).val();
+    this.submitMessage = function() {
+        var $input = $('input', this);
+        var message = $input.val();
 
         if (message) {
             JF.site.chat.actions.send('message', message);
+            $input.val('');
         }
 
         return false;
     };
-};
 
-JF.site.chat.actions.roll = new function() {
-    this.click = function() {
+    this.roll = function() {
         var sides = $(this).attr('data-sides');
 
         if (sides) {
@@ -332,7 +330,7 @@ JF.site.chat.render.content = new function() {
         // Prepare message entry
         var $entryForm = JF.site.chat.html.getMessageWrapper();
         $entryForm.empty();
-        $entryForm.submit(JF.site.chat.actions.messages.submit);
+        $entryForm.submit(JF.site.chat.actions.submitMessage);
 
         var $input = JF.site.chat.html.createMessageInput();
 
@@ -378,7 +376,7 @@ JF.site.chat.render.content = new function() {
         $a
             .attr('href', 'javascript:;')
             .attr('data-sides', sides)
-            .click(JF.site.chat.actions.roll.click);
+            .click(JF.site.chat.actions.roll);
         if (count == 1) {
             $a.html('<b>' + sides + '</b>-sided die');
             $content
