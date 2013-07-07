@@ -2,7 +2,14 @@
 
 return [
     'containers' => [
-        'default' => [
+        'default-user' => [
+            [
+                'name' => 'home',
+                'options' => [
+                    'label' => 'Home',
+                    'route' => 'home'
+                ],
+            ],
             [
                 'name' => 'rooms',
                 'options' => [

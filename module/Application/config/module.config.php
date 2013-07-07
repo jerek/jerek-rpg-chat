@@ -68,6 +68,10 @@ return [
     ],
 
     'view_manager' => [
+        'template_map' => [
+            'layout/menu' => __DIR__ . '/../view/application/layout/menu.twig',
+        ],
+
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],

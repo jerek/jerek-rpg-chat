@@ -14,6 +14,10 @@ class RoomController extends AbstractActionController
 {
     public function indexAction()
     {
+        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+            throw new \Exception('You must sign in to see what rooms you have access to.');
+        }
+
         $roomRepository = $this
             ->getServiceLocator()
             ->get('Doctrine\ORM\EntityManager')
@@ -26,6 +30,10 @@ class RoomController extends AbstractActionController
 
     public function viewAction()
     {
+        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+            throw new \Exception('You must sign in to access this room.');
+        }
+
         $roomId = $this->getEvent()->getRouteMatch()->getParam('id');
         $roomService = $this->getServiceLocator()->get('Application\Service\Room');
 
@@ -36,13 +44,13 @@ class RoomController extends AbstractActionController
 
     public function contentAction()
     {
+        if (!$this->zfcUserAuthentication()->hasIdentity()) {
+            throw new \Exception('You must sign in to interact with this room.');
+        }
+
         $roomId = $this->getEvent()->getRouteMatch()->getParam('id');
         $typeName = $this->getEvent()->getRouteMatch()->getParam('type');
         $value = $this->getEvent()->getRouteMatch()->getParam('value');
-
-        if (!$this->zfcUserAuthentication()->hasIdentity()) {
-            throw new \Exception('Requires login.');
-        }
 
         // FIXME: Verify user has permissions in room
 

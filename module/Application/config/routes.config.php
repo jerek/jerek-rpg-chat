@@ -6,9 +6,15 @@ return [
         'options' => [
             'route'    => '/',
             'defaults' => [
+                'controller' => 'zfcuser',
+                'action'     => 'login',
+            ],
+            /*
+            'defaults' => [
                 'controller' => 'Application\Controller\Index',
                 'action'     => 'index',
             ],
+            */
         ],
     ],
     'rooms' => [
