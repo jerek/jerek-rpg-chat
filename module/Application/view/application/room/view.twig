@@ -8,12 +8,14 @@
             <table class="room-rows"></table>
         </div>
     </div>
-    <table class="room-actionframe">
-        <tr>
-            <td class="room-dice"></td>
-            <td class="room-message"><form></form></td>
-        </tr>
-    </table>
+    <div class="room-actionframe">
+        <table>
+            <tr>
+                <td class="room-dice"></td>
+                <td class="room-message"><form></form></td>
+            </tr>
+        </table>
+    </div>
     <script>JF.site.chat.init({{ room|json_encode()|raw }});</script>
 
 {% endblock %}
