@@ -28,6 +28,7 @@ JF.site.chat = new function() {
 };
 
 JF.site.chat.html = new function() {
+    var dice = [ 'd', 4, 6, 8, 10, 12, 20, 100 ];
     var prefix = 'room';
     var $chat = false;
 
@@ -59,8 +60,6 @@ JF.site.chat.html = new function() {
     this.getDiceWrapper = function() {
         return $('.' + prefix + '-dice');
     };
-
-    var dice = [ 4, 6, 8, 10, 12, 20, 100 ];
 
     this.createDice = function($target) {
         var $div = $target || $('<div/>');
@@ -118,6 +117,20 @@ JF.site.chat.actions = new function() {
         var $this = $(this);
         var sides = $this.attr('data-sides');
         var count = $this.attr('data-count');
+
+        if (sides == 'd') {
+            var dice = prompt('Enter what dice you want to roll in #d# notation.', '3d6');
+            if (!dice) return;
+
+            var match = dice.match(/^([0-9]+)d([0-9]+)$/);
+            if (!match) {
+                alert('I can\'t roll that! Try something more like this:\n2d10 (2 dice with 10 sides each)\n3d8 (3 dice with 8 sides each)\n5d4 (5 dice with 4 sides each)');
+                return;
+            }
+
+            count = match[1];
+            sides = match[2];
+        }
 
         if (sides) {
             if (count) {
