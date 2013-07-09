@@ -421,19 +421,15 @@ JF.site.chat.render.content = new function() {
                 .append(this.rollResult(total, sides))
                 .append(' (');
         }
-        console.log('loop');
         for (var i = 0; i < values.length; i++) {
-            console.log(values[i],sides, values.length);
             $content.append(this.rollResult(values[i], sides, values.length > 1));
             if (i + 1 < values.length) {
                 $content.append(', ');
             }
         }
-        console.log('loop done');
         if (values.length > 1) {
             $content.append(')');
         }
-        console.log('finished func');
     };
 
     this.rollResult = function(value, sides, unbolded) {
