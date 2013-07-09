@@ -7,9 +7,7 @@ JF.site.chat = new function() {
         });
 
         JF.site.chat.render.content.init();
-        if (data) {
-            JF.site.chat.data.init(data);
-        }
+        JF.site.chat.data.init(data);
     };
 
     this.scrollToBottom = function(animate) {
@@ -92,8 +90,10 @@ JF.site.chat.actions = new function() {
     };
 
     this.sent = function(jqXHR, textStatus) {
-        if (jqXHR.responseJSON) {
-            JF.site.chat.render.row(jqXHR.responseJSON);
+        return; // FIXME: Temporary fix to double rendering of rows. (/pull is also delivering simultaneously)
+        var data = jqXHR.responseJSON;
+        if (data) {
+            JF.site.chat.render.row(data);
         }
     };
 
@@ -150,8 +150,29 @@ JF.site.chat.data = new function() {
     this.init = function(data) {
         if ($.isPlainObject(data)) {
             rows = data;
+            JF.site.chat.render.refresh();
         }
-        JF.site.chat.render.refresh();
+
+        this.pull();
+    };
+
+    this.pull = function() {
+        $.ajax({
+            url: '/pull?room=' + JF.site.getRoomNumber() + '&last=' + (JF.site.chat.render.getLastId() || 0),
+            dataType: 'json',
+            success: JF.site.chat.data.pullSuccess,
+            error: JF.site.chat.data.pull
+        });
+    };
+
+    this.pullSuccess = function(jqXHR, textStatus) {
+        if ($.isArray(jqXHR)) {
+            for (var i in jqXHR) {
+                JF.site.chat.render.row(jqXHR[i]);
+            }
+        }
+
+        JF.site.chat.data.pull();
     };
 
     this.get = function() {
@@ -177,9 +198,14 @@ JF.site.chat.render = new function() {
     var columns = 2;
     var dayColumnIndex = 0;
     var last = {
+        id: false,
         date: false,
         time: false,
         user: false
+    };
+
+    this.getLastId = function() {
+        return last.id;
     };
 
     this.refresh = function() {
@@ -233,6 +259,7 @@ JF.site.chat.render = new function() {
         var startDate = (last.date != rowDay);
         var startTime = (last.time != timestamp.time);
         var startUser = (last.user != row.user.id);
+        last.id = row.id;
         last.date = rowDay;
         last.time = timestamp.time;
         last.user = row.user.id;

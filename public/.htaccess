@@ -3,6 +3,9 @@ RewriteEngine On
 RewriteCond %{HTTP_HOST} !^asd\.(.+\..+)$ [NC]
 RewriteCond %{HTTP_HOST} ^.+\.(.+\..+)$ [NC]
 RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+# Forward pull requests to pull script
+RewriteCond %{REQUEST_URI}::$1 ^/pull$
+RewriteRule ^(.*)$ %{ENV:BASE}pull.php [NC,L]
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
 RewriteCond %{REQUEST_FILENAME} -s [OR]

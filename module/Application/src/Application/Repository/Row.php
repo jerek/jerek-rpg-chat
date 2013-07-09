@@ -26,11 +26,12 @@ class Row extends EntityRepository
             ->leftJoin('row.rolls', 'rolls')
             ->leftJoin('row.message', 'message')
             ->orderBy('row.time', 'ASC')
+            ->orderBy('rolls.id', 'ASC')
             ->where('row.id = ?1')
             ->setParameter(1, $rowId);
 
         $query = $qb->getQuery();
-        $query->useResultCache(true);
+        $query->useResultCache(false); // TODO
 
         $result = $query->execute([], Query::HYDRATE_ARRAY);
 
