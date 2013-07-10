@@ -25,8 +25,8 @@ class Row extends EntityRepository
             ->leftJoin('row.type', 'type')
             ->leftJoin('row.rolls', 'rolls')
             ->leftJoin('row.message', 'message')
-            ->orderBy('row.time', 'ASC')
             ->orderBy('rolls.id', 'ASC')
+            ->orderBy('row.id', 'ASC')
             ->where('row.id = ?1')
             ->setParameter(1, $rowId);
 
