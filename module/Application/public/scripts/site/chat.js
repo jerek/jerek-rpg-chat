@@ -442,7 +442,7 @@ JF.site.chat.render.content = new function() {
         if (values.length > 1) {
             var total = 0;
             for (var i in values) {
-                total += values[i];
+                total += parseInt(values[i]);
             }
             $content
                 .append(this.rollResult(total, sides))
